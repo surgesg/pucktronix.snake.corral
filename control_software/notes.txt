@@ -1,0 +1,7 @@
+notes on pucktronix.snake.corral
+
+02.26.2012
+
+things to implement
+	clear matrix button
+	check OSC
