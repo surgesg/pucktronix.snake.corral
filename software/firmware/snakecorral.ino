@@ -16,7 +16,20 @@
                        |||||||||
                        |||||||||
                        +++++++++
-                       
+        
+ This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+               
 ***************************************************************************************/
 
 #define X0 PIN_F0
@@ -58,7 +71,7 @@ void setup(){
 
 
 void loop(){
-  if(Serial.available() >= 3){
+  if(Serial.available() > 3){
     first_byte = Serial.read();
     if(first_byte == 255){ // chip 1
       //delayMicroseconds(200);
@@ -67,8 +80,13 @@ void loop(){
       y = Serial.read();
       //delayMicroseconds(200);
       state = Serial.read();
-      //delayMicroseconds(150);
       togglePins(CS1, x, y, state);
+      Serial.print("received x: ");
+      Serial.print(x);
+      Serial.print(" y: ");
+      Serial.print(y);
+      Serial.print(" state: ");
+      Serial.println(state);
     } else if(first_byte == 254){ // chip 2
         //delayMicroseconds(200);
         x = Serial.read();
@@ -87,6 +105,8 @@ void togglePins(int chip, uint8_t x, uint8_t y, int state){
     x += 2;
   }
   digitalWrite(chip, HIGH);
+      delayMicroseconds(10000);
+
   if(bitRead(x, 0)) digitalWrite(X0, HIGH);
 
   if(bitRead(x, 1)) digitalWrite(X1, HIGH);
@@ -100,11 +120,21 @@ void togglePins(int chip, uint8_t x, uint8_t y, int state){
 
   if(bitRead(y, 2)) digitalWrite(Y2, HIGH);  
 
-  digitalWrite(STROBE, HIGH);
+  Serial.println(bitRead(x,0));
+   Serial.println(bitRead(x,1));
+  Serial.println(bitRead(x,2));
+  Serial.println(bitRead(x,3));
+  Serial.println(bitRead(y,0));
+  Serial.println(bitRead(y,1));
+  Serial.println(bitRead(y,2));
 
+  delayMicroseconds(10000);
+
+  digitalWrite(STROBE, HIGH);
   digitalWrite(DATA, state);
 
   digitalWrite(STROBE, LOW);
+
   digitalWrite(X0, LOW);
   digitalWrite(X1, LOW);
   digitalWrite(X2, LOW);
